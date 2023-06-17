@@ -2,35 +2,19 @@
 using namespace std;
 
 int partition(int arr[],int s, int e){
+
     int pivot = arr[s];
-    int cnt = 0;
-
-    for(int i=s+1; i<=e; i++){
-        if(arr[i] <= pivot){
-            cnt++;
-        }
-    }
-    //place pivot at right position
-    int pivotIndex = s + cnt;
-    swap(arr[pivotIndex],arr[s]);
-
-    //
     int i = s, j = e;
-    
-    while(i < pivotIndex && j > pivotIndex){
 
-        while(arr[i] <= pivot){
-            i++;
-        }
-        while(arr[j] > pivot){
-            j--;
-        }
-        if(i < pivotIndex && j > pivotIndex){
-            swap(arr[i++],arr[j--]);
-        }
+    while(i<=j)
+    {
+        while(arr[i] <= pivot && i <= e-1)  i++;
+        while(arr[j] > pivot && j >= s+1)   j--;
+        if(i<j) swap(arr[i++],arr[j--]);
     }
-    return pivotIndex;
     
+    swap(arr[s],arr[j]);
+    return j;  
 }
 void quicksort(int arr[], int s, int e){
     //base case

@@ -51,6 +51,16 @@ int fib(int n){
     {
         sum += (i-1) + (i-2);
     }
+    return sum;
+}
+
+void revArray(int *array, int n, int i)
+{
+    if( i >= n/2)
+        return;
+
+    swap(array[i], array[n-i-1]);
+    revArray(array, n, i+1);    
 }
 
 int main(){
@@ -68,7 +78,12 @@ int main(){
         cout<<"No";
     }
 
+    int array[5] = {3,4,2,1,5};
+    revArray(array,5,0);
 
+    for(int i=0;i<5; i++){
+        cout<<array[i]<<" ";
+    }
     
     //int ans = fact(n);
     //int ans = power(n);
