@@ -62,6 +62,8 @@ void print(stack<int> s){
     cout<<x<<" ";
     s.push(x);    
 }
+
+
 void deleteMiddle(stack<int>&inputStack,int count, int size) {
    if(count == size/2){
       inputStack.pop();

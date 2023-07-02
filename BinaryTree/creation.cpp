@@ -130,42 +130,43 @@ void postorder(node *root)
 }
 
 // PRE-IN-POST ORDER - ITERATIVE
-vector<int> preInPostTraversal(node* root)
+void preInPostTraversal(node *root)
 {
-    stack<pair<node*,int> > st;
-    st.push({root,1});
+    stack<pair<node *, int> > st;
+    st.push({root, 1});
     vector<int> pre, in, post;
-    if(root == NULL) return ;
+    if (root == NULL)
+        return;
 
-    while(!st.empty())
+    while (!st.empty())
     {
         auto it = st.top();
         st.pop();
 
-        if(it.second == 1)
+        if (it.second == 1)
         {
-            pre.push_back(it.first -> data);
+            pre.push_back(it.first->data);
             it.second++;
             st.push(it);
 
-            if(it.first -> left != NULL)
+            if (it.first->left != NULL)
             {
-                st.push({it.first -> left, 1})
+                st.push({it.first->left, 1})
             }
         }
-        else if(it.second == 2)
+        else if (it.second == 2)
         {
-            in.push_back(it.first -> data);
+            in.push_back(it.first->data);
             it.second++;
             st.push(it);
 
-            if(it.first -> right != NULL)
+            if (it.first->right != NULL)
             {
-                st.push({it.first -> right, 1});
+                st.push({it.first->right, 1});
             }
         }
         else
-            post.push_back(it.first -> data);
+            post.push_back(it.first->data);
     }
 }
 
@@ -255,44 +256,66 @@ pair<bool, int> isBalancedFast(node *root)
 
 // OPTIMAL 2
 
-int dfsHeight(node* root)
+int dfsHeight(node *root)
 {
-    if(root == NULL)
+    if (root == NULL)
         return 0;
 
-    int leftHeight = dfsHeight(root -> left);
-    if(leftHeight == -1) return -1;
-    int rightHeight = dfsHeight(root -> right);
-    if(rightHeight == -1) return -1;
+    int leftHeight = dfsHeight(root->left);
+    if (leftHeight == -1)
+        return -1;
+    int rightHeight = dfsHeight(root->right);
+    if (rightHeight == -1)
+        return -1;
 
-    if(abs(leftHeight - rightHeight) > 1) return -1;
-    return max(leftHeight, rightHeight) + 1;    
+    if (abs(leftHeight - rightHeight) > 1)
+        return -1;
+    return max(leftHeight, rightHeight) + 1;
 }
 
-bool isTreeBalanced(node* root)
+bool isTreeBalanced(node *root)
 {
     // if dfsHeight returns a binary tree then true else false
-    return dfsHeight(root) != -1;  
-}    
+    return dfsHeight(root) != -1;
+}
 
 // DIAMETER OF BINARY TREE (longest distance between two end nodes)
 
-int helperHeight(node* root, int& diameter)
+int helperHeight(node *root, int &diameter)
 {
-    if(root == NULL)
+    if (root == NULL)
         return 0;
 
-    int leftHeight = helperHeight(root -> left, diameter);
-    int rightHeight  = helperHeight(root -> right, diameter);
+    int leftHeight = helperHeight(root->left, diameter);
+    int rightHeight = helperHeight(root->right, diameter);
     diameter = max(diameter, leftHeight + rightHeight);
-    return 1 + max(leftHeight,rightHeight);  
+    return 1 + max(leftHeight, rightHeight);
 }
 
-int diameterOfBinaryTree(node* root)
+int diameterOfBinaryTree(node *root)
 {
     int diameter = 0;
     helperHeight(root, diameter);
     return diameter;
+}
+
+// Maximum Path Sum
+
+int solve(node *root, int &maxiSum)
+{
+    if (root == NULL)
+        return 0;
+
+    int leftSum = max(0, solve(root->left, maxiSum));
+    int rightSum = max(0, solve(root->right, maxiSum));
+    maxiSum = max(maxiSum, leftSum + rightSum + root->data);
+    return root->data + max(leftSum, rightSum);
+}
+int maxPathSum(node *root)
+{
+    int maxiSum = INT_MIN;
+    solve(root, maxiSum);
+    return maxiSum;
 }
 
 // SUM TREE OR NOT(every node is a sum of its left or right subtree)
@@ -449,7 +472,7 @@ vector<int> verticalOrder(node *root)
 
     while (!q.empty())
     {
-        pair<node *, pair<int, int > > temp = q.front();
+        pair<node *, pair<int, int> > temp = q.front();
         q.pop();
 
         node *frontNode = temp.first;
@@ -485,7 +508,7 @@ vector<int> topView(node *root)
         return ans;
 
     map<int, int> m;
-    queue<pair<node *, int > > q;
+    queue<pair<node *, int> > q;
 
     q.push(make_pair(root, 0));
 
@@ -586,6 +609,48 @@ vector<int> diagonal(node *root)
     return ans;
 }
 
+// Symmetric Binary Tree
+bool isSymmetricHelp(node *left, node *right)
+{
+    if (left == NULL || right == NULL)
+        return left == right;
+
+    if (left->data != right->data)
+        return false;
+
+    return isSymmetricHelp(left->left, right->right) && isSymmetricHelp(left->right, right->left);
+}
+bool isSymmetric(node *root)
+{
+    return root == NULL || isSymmetricHelp(root->left, root->right);
+}
+
+// Path to given node
+bool getPath(node *root, vector<int> &ans, int B)
+{
+    if (root == NULL)
+        return false;
+
+    ans.push_back(root->data);
+
+    if (root->data == B)
+        return true;
+    if (getPath(root->left, ans, B) || getPath(root->right, ans, B))
+        return true;
+
+    ans.pop_back();
+    return false;
+}
+
+vector<int> solve(node *A, int B)
+{
+    vector<int> ans;
+    if (A == NULL)
+        return ans;
+    getPath(A, ans, B);
+    return ans;
+}
+
 // Sum of the Longest Bloodline of a Tree (Sum of nodes on the longest path from root to leaf node)
 void solve(node *root, int len, int &maxLen, int sum, int &maxSum)
 {
@@ -623,7 +688,7 @@ int sumOfLongRootToLeafPath(node *root)
     return maxSum;
 }
 
-//LOWEST COMMON ANCESTOR IN A BINARY TREE
+// LOWEST COMMON ANCESTOR IN A BINARY TREE
 node *lca(node *root, int n1, int n2)
 {
     if (root == NULL)
@@ -635,14 +700,121 @@ node *lca(node *root, int n1, int n2)
     node *leftAns = lca(root->left, n1, n2);
     node *rightAns = lca(root->right, n1, n2);
 
-    if (leftAns != NULL && rightAns != NULL)
-        return root;
-    else if (leftAns == NULL && rightAns != NULL)
+    if (leftAns == NULL)
         return rightAns;
-    else if (leftAns != NULL && rightAns == NULL)
+    else if (rightAns == NULL)
         return leftAns;
     else
-        return NULL;
+        return root;
+}
+
+// Width of Binary Tree
+int widthOfBinaryTree(node *root)
+{
+    if (!root)
+        return 0;
+
+    int ans = 0;
+    queue<pair<node *, int> > q;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        int minn = q.front().second;
+        int size = q.size();
+        int first, last;
+        for (int i = 0; i < size; i++)
+        {
+            int curr_idx = q.front().second - minn;
+            node *node = q.front().first;
+            q.pop();
+            if (i == 0)
+                first = curr_idx;
+            if (i == size - 1)
+                last = curr_idx;
+            if (node->left)
+                q.push({node->left, (long long)2 * curr_idx + 1});
+            if (node->right)
+                q.push({node->right, (long long)2 * curr_idx + 2});
+        }
+        ans = max(ans, last - first + 1);
+    }
+
+    return ans;
+}
+
+// CHILD SUM PROPERTY
+void changeTree(node *root)
+{
+    if (root == NULL)
+        return;
+
+    int child = 0;
+    if (root->left)
+        child += root->left->data;
+    if (root->right)
+        child += root->right->data;
+
+    if (child >= root->data)
+        root->data = child;
+    else
+    {
+        if (root->left)
+            root->left->data = root->data;
+        else if (root->right)
+            root->right->data = root->data;
+    }
+
+    changeTree(root->left);
+    changeTree(root->right);
+
+    int total = 0;
+    if (root->left)
+        total += root->left->data;
+    if (root->right)
+        total += root->right->data;
+    if (root->left || root->right)
+        root->data = total;
+}
+
+// COUNT COMPLETE TREE NODES 
+int findRightHeight(node* node)
+{
+    int height = 0;
+    while(node)
+    {
+        height++;
+        node = node -> right;
+    }
+    return height;
+}
+
+int findLeftHeight(node* node)
+{
+    int height = 0;
+    while(node)
+    {
+        height++;
+        node = node -> left;
+    }
+    return height;
+}
+int countNodes(node* root) 
+{
+    if(root == NULL) return 0;
+
+    int lh = findLeftHeight(root);
+    int rh = findRightHeight(root);
+        
+    if(lh == rh)
+        return (1 << lh) - 1;  // left shift lh means 2^lh
+
+    return 1 + countNodes(root -> left) + countNodes(root -> right);    
+}
+
+int countNodesEasy(node* root) 
+{
+    if(root == NULL) return 0;
+        return 1 + countNodes(root -> left) + countNodes(root -> right);    
 }
 
 int main()
