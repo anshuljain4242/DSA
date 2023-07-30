@@ -14,7 +14,10 @@
             "compilerPath": "/usr/bin/cpp",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64"
+            "intelliSenseMode": "macos-clang-x64",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false
+            }
         }
     ],
     "version": 4

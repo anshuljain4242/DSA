@@ -27,9 +27,7 @@ vector<int> firstNegative(vector<int> arr, int n, int k){
                 if(arr[i] == negative.front()){
                     negative.pop_front();
                 }
-                
             }
-            
             i++;
             j++;
         }    

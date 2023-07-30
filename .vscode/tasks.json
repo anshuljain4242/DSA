@@ -5,6 +5,8 @@
             "label": "C/C++: clang++ build active file",
             "command": "/usr/bin/cpp",
             "args": [
+                "-std=c++17",
+                "-stdlib=libc++",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",

@@ -3,7 +3,7 @@
 using namespace std;
 
 int findMinimumCost(string str) {
-
+  // if string length odd, no way to make the string valid.
   if(str.length()%2 == 1){
     return -1;
   }
@@ -37,7 +37,7 @@ int findMinimumCost(string str) {
     }
     int ans = (a+1)/2 + (b+1)/2;
     return ans;
-  
+
 }
 
 int main(){

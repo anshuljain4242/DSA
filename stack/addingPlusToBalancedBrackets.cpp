@@ -23,9 +23,6 @@ int solve(string s){
             st.push(ch);
             open = true;
         }
-
-            
-
     }
 }
 

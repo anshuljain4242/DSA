@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include<unordered_set>
 
 using namespace std::chrono;
 using namespace std;
@@ -72,8 +73,8 @@ Node* removeDuplicates(Node* &head){
 }
 //from unsorted list
 Node* removeUnDuplicates(Node* &head){
-    if(head == NULL)
-        return NULL;
+    // if(head == NULL)
+    //     return NULL;
 
     // Node* temp = head;
     // set< int> visited;
@@ -92,6 +93,30 @@ Node* removeUnDuplicates(Node* &head){
     //     }
         
     // }
+    // return head;
+
+    if(head -> next == NULL)
+        return head;
+
+    unordered_set<int> mp;
+    
+    Node* prev = NULL;
+    Node* curr = head;
+    
+    while(curr != NULL){
+        Node* forw = curr -> next;
+        // if element exixts in map
+        if(mp.find(curr -> data) != mp.end()){
+            prev -> next = forw;
+            curr = forw;
+        }
+        else{
+            mp.insert(curr -> data);
+            prev = curr;
+            curr = forw;
+            
+        }
+    }
     return head;
 }
 
